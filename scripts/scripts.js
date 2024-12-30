@@ -134,6 +134,10 @@ const bets = [
   [15, 22, 32, 52, 53, 55],
 ];
 
+const uniqueBets = Array.from(new Set(bets.map(JSON.stringify))).map(
+  JSON.parse
+);
+
 function displayBets(filteredBets) {
   betsList.innerHTML = "";
   if (filteredBets.length === 0) {
@@ -151,7 +155,7 @@ function filterBets() {
   const searchValue = searchInput.value.replace(/[^0-9\s]/g, " ").trim();
 
   if (searchValue === "") {
-    displayBets(bets);
+    displayBets(uniqueBets);
     return;
   }
 
@@ -159,7 +163,7 @@ function filterBets() {
     .split(/\s+/)
     .map((num) => parseInt(num, 10));
 
-  const filteredBets = bets.filter((bet) =>
+  const filteredBets = uniqueBets.filter((bet) =>
     searchNumbers.every((num) => bet.includes(num))
   );
 
@@ -168,4 +172,4 @@ function filterBets() {
 
 searchInput.addEventListener("input", filterBets);
 
-displayBets(bets);
+displayBets(uniqueBets);
