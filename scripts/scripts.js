@@ -138,38 +138,42 @@ const uniqueBets = Array.from(new Set(bets.map(JSON.stringify))).map(
   JSON.parse
 );
 
-function displayBets(filteredBets) {
+function renderBets(sortedBets, highlightedNumbers) {
   betsList.innerHTML = "";
-  if (filteredBets.length === 0) {
-    betsList.innerHTML = "<li>Nenhuma aposta encontrada</li>";
-    return;
-  }
-  filteredBets.forEach((bet) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = bet.join(", ");
-    betsList.appendChild(listItem);
+  sortedBets.forEach(({ bet, matches }) => {
+    const betItem = document.createElement("li");
+    betItem.innerHTML = bet
+      .map((num) =>
+        highlightedNumbers.has(num)
+          ? `<span style="color: green;">${num}</span>`
+          : `<span style="color: red;">${num}</span>`
+      )
+      .join(", ");
+    betItem.setAttribute("data-matches", matches);
+    betsList.appendChild(betItem);
   });
 }
 
-function filterBets() {
-  const searchValue = searchInput.value.replace(/[^0-9\s]/g, " ").trim();
+function filterAndSortBets() {
+  const inputNumbers = searchInput.value
+    .split(" ")
+    .map(Number)
+    .filter((n) => !isNaN(n));
+  const highlightedNumbers = new Set(inputNumbers);
 
-  if (searchValue === "") {
-    displayBets(uniqueBets);
-    return;
-  }
+  const sortedBets = uniqueBets
+    .map((bet) => {
+      const matches = bet.filter((num) => highlightedNumbers.has(num)).length;
+      return { bet, matches };
+    })
+    .sort((a, b) => b.matches - a.matches);
 
-  const searchNumbers = searchValue
-    .split(/\s+/)
-    .map((num) => parseInt(num, 10));
-
-  const filteredBets = uniqueBets.filter((bet) =>
-    searchNumbers.every((num) => bet.includes(num))
-  );
-
-  displayBets(filteredBets);
+  renderBets(sortedBets, highlightedNumbers);
 }
 
-searchInput.addEventListener("input", filterBets);
+searchInput.addEventListener("input", filterAndSortBets);
 
-displayBets(uniqueBets);
+renderBets(
+  uniqueBets.map((bet) => ({ bet, matches: 0 })),
+  new Set()
+);

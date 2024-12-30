@@ -98,3 +98,16 @@ footer {
 footer p {
   margin: 0;
 }
+
+li {
+  margin: 5px 0;
+  font-family: Arial, sans-serif;
+}
+
+li span {
+  font-weight: bold;
+}
+
+li span {
+  margin-right: 5px;
+}
