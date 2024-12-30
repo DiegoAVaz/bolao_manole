@@ -145,8 +145,8 @@ function renderBets(sortedBets, highlightedNumbers) {
     betItem.innerHTML = bet
       .map((num) =>
         highlightedNumbers.has(num)
-          ? `<span style="color: green;">${num}</span>`
-          : `<span style="color: red;">${num}</span>`
+          ? `<span style="color: #00c853;">${num}</span>`
+          : `<span style="color:rgb(249, 114, 114);">${num}</span>`
       )
       .join(", ");
     betItem.setAttribute("data-matches", matches);
