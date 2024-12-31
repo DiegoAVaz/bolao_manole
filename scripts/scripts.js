@@ -148,7 +148,7 @@ function renderBets(sortedBets, highlightedNumbers) {
           ? `<span style="color: #00c853;">${num}</span>`
           : `<span style="color:rgb(249, 114, 114);">${num}</span>`
       )
-      .join(", ");
+      .join(" ");
     betItem.setAttribute("data-matches", matches);
     betsList.appendChild(betItem);
   });
